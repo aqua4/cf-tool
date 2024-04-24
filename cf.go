@@ -16,8 +16,8 @@ import (
 	docopt "github.com/docopt/docopt-go"
 )
 
-const version = "$CI_VERSION"
-const buildTime = "$CI_BUILD_TIME"
+const version = "v1.0.10"
+const buildTime = "1"
 const configPath = "~/.cf/config"
 const sessionPath = "~/.cf/session"
 
