@@ -12,6 +12,15 @@ import (
 	"github.com/fatih/color"
 )
 
+func findMessage(body []byte) (string, error) {
+	reg := regexp.MustCompile(`Codeforces.showMessage\("([^"]*)"\);\s*?Codeforces\.reformatTimes\(\);`)
+	tmp := reg.FindSubmatch(body)
+	if tmp != nil {
+		return string(tmp[1]), nil
+	}
+	return "", errors.New("Cannot find any message")
+}
+
 func findErrorMessage(body []byte) (string, error) {
 	reg := regexp.MustCompile(`error[a-zA-Z_\-\ ]*">(.*?)</span>`)
 	tmp := reg.FindSubmatch(body)

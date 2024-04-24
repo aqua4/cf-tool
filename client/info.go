@@ -3,7 +3,6 @@ package client
 import (
 	"errors"
 	"fmt"
-	"path/filepath"
 	"strings"
 )
 
@@ -22,7 +21,6 @@ type Info struct {
 	GroupID      string `json:"group_id"`
 	ProblemID    string `json:"problem_id"`
 	SubmissionID string `json:"submission_id"`
-	RootPath     string
 }
 
 // ErrorNeedProblemID error
@@ -73,21 +71,6 @@ func (info *Info) Hint() string {
 		text = text + ", submission " + info.SubmissionID
 	}
 	return text
-}
-
-// Path path
-func (info *Info) Path() string {
-	path := info.RootPath
-	if info.GroupID != "" {
-		path = filepath.Join(path, info.GroupID)
-	}
-	if info.ProblemType != "acmsguru" && info.ContestID != "" {
-		path = filepath.Join(path, info.ContestID)
-	}
-	if info.ProblemID != "" {
-		path = filepath.Join(path, strings.ToLower(info.ProblemID))
-	}
-	return path
 }
 
 // ContestListURL parse contest list url
@@ -221,7 +204,7 @@ func (info *Info) RegisterURL(host string) (string, error) {
 		return info.errorContest()
 	}
 
-	return fmt.Sprintf(host + "/contestRegistration/%v", info.ContestID), nil
+	return fmt.Sprintf(host+"/contestRegistration/%v", info.ContestID), nil
 }
 
 // OpenURL open url

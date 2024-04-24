@@ -2,12 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 	"regexp"
 
 	"cf-tool/client"
-	"cf-tool/config"
 
 	"github.com/docopt/docopt-go"
 )
@@ -24,19 +21,6 @@ type ParsedArgs struct {
 	Version   string   `docopt:"{version}"`
 	Config    bool     `docopt:"config"`
 	Submit    bool     `docopt:"submit"`
-	Register  bool     `docopt:"register"`
-	List      bool     `docopt:"list"`
-	CList     bool     `docopt:"clist"`
-	Parse     bool     `docopt:"parse"`
-	Gen       bool     `docopt:"gen"`
-	Test      bool     `docopt:"test"`
-	Watch     bool     `docopt:"watch"`
-	Open      bool     `docopt:"open"`
-	Stand     bool     `docopt:"stand"`
-	Sid       bool     `docopt:"sid"`
-	Race      bool     `docopt:"race"`
-	Pull      bool     `docopt:"pull"`
-	Clone     bool     `docopt:"clone"`
 	Upgrade   bool     `docopt:"upgrade"`
 }
 
@@ -44,12 +28,7 @@ type ParsedArgs struct {
 var Args *ParsedArgs
 
 func parseArgs(opts docopt.Opts) error {
-	cfg := config.Instance
 	cln := client.Instance
-	path, err := os.Getwd()
-	if err != nil {
-		return err
-	}
 	if file, ok := opts["--file"].(string); ok {
 		Args.File = file
 	} else if file, ok := opts["<file>"].(string); ok {
@@ -92,21 +71,6 @@ func parseArgs(opts docopt.Opts) error {
 			info.SubmissionID = value
 		}
 	}
-	if info.ProblemType == "" {
-		parsed := parsePath(path)
-		if value, ok := parsed["problemType"]; ok {
-			info.ProblemType = value
-		}
-		if value, ok := parsed["contestID"]; ok && info.ContestID == "" {
-			info.ContestID = value
-		}
-		if value, ok := parsed["groupID"]; ok && info.GroupID == "" {
-			info.GroupID = value
-		}
-		if value, ok := parsed["problemID"]; ok && info.ProblemID == "" {
-			info.ProblemID = value
-		}
-	}
 	if info.ProblemType == "" || info.ProblemType == "contest" {
 		if len(info.ContestID) < 6 {
 			info.ProblemType = "contest"
@@ -120,22 +84,7 @@ func parseArgs(opts docopt.Opts) error {
 		}
 		info.ContestID = "99999"
 	}
-	root := cfg.FolderName["root"]
-	info.RootPath = filepath.Join(path, root)
-	for {
-		base := filepath.Base(path)
-		if base == root {
-			info.RootPath = path
-			break
-		}
-		if filepath.Dir(path) == path {
-			break
-		}
-		path = filepath.Dir(path)
-	}
-	info.RootPath = filepath.Join(info.RootPath, cfg.FolderName[info.ProblemType])
 	Args.Info = info
-	// util.DebugJSON(Args)
 	return nil
 }
 
@@ -216,31 +165,6 @@ func parseArg(arg string) map[string]string {
 				}
 			}
 		}
-	}
-	return output
-}
-
-func parsePath(path string) map[string]string {
-	path = filepath.ToSlash(path) + "/"
-	output := make(map[string]string)
-	cfg := config.Instance
-	for k, problemType := range client.ProblemTypes {
-		reg := regexp.MustCompile(fmt.Sprintf(ArgTypePathRegStr[k], cfg.FolderName["root"], cfg.FolderName[problemType]))
-		names := reg.SubexpNames()
-		for i, val := range reg.FindStringSubmatch(path) {
-			if names[i] != "" && val != "" {
-				output[names[i]] = val
-			}
-			output["problemType"] = problemType
-		}
-	}
-	if (output["problemType"] != "" && output["problemType"] != "group") ||
-		output["groupID"] == output["contestID"] ||
-		output["groupID"] == fmt.Sprintf("%v%v", output["contestID"], output["problemID"]) {
-		output["groupID"] = ""
-	}
-	if output["groupID"] != "" && output["problemType"] == "" {
-		output["problemType"] = "group"
 	}
 	return output
 }

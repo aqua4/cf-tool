@@ -4,16 +4,9 @@ import (
 	"fmt"
 	"regexp"
 
-	"cf-tool/client"
 	"cf-tool/util"
 	"github.com/fatih/color"
 )
-
-// SetGenAfterParse set it yes or no
-func (c *Config) SetGenAfterParse() (err error) {
-	c.GenAfterParse = util.YesOrNo(`Run "cf gen" after "cf parse" (y/n)? `)
-	return c.save()
-}
 
 func formatHost(host string) (string, error) {
 	reg := regexp.MustCompile(`https?://[\w\-]+(\.[\w\-]+)+/?`)
@@ -81,23 +74,6 @@ func (c *Config) SetProxy() (err error) {
 		color.Green("Current proxy is based on environment")
 	} else {
 		color.Green("Current proxy is %v", proxy)
-	}
-	return c.save()
-}
-
-// SetFolderName set folder name
-func (c *Config) SetFolderName() (err error) {
-	color.Cyan(`Set folders' name`)
-	color.Cyan(`Enter empty line if you don't want to change the value`)
-	color.Green(`Root path (current: %v)`, c.FolderName["root"])
-	if value := util.ScanlineTrim(); value != "" {
-		c.FolderName["root"] = value
-	}
-	for _, problemType := range client.ProblemTypes {
-		color.Green(`%v path (current: %v)`, problemType, c.FolderName[problemType])
-		if value := util.ScanlineTrim(); value != "" {
-			c.FolderName[problemType] = value
-		}
 	}
 	return c.save()
 }

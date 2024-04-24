@@ -3,34 +3,17 @@ package config
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/fatih/color"
 	"io"
 	"os"
 	"path/filepath"
-
-	"cf-tool/client"
-	"github.com/fatih/color"
 )
-
-// CodeTemplate config parse code template
-type CodeTemplate struct {
-	Alias        string   `json:"alias"`
-	Lang         string   `json:"lang"`
-	Path         string   `json:"path"`
-	Suffix       []string `json:"suffix"`
-	BeforeScript string   `json:"before_script"`
-	Script       string   `json:"script"`
-	AfterScript  string   `json:"after_script"`
-}
 
 // Config load and save configuration
 type Config struct {
-	Template      []CodeTemplate    `json:"template"`
-	Default       int               `json:"default"`
-	GenAfterParse bool              `json:"gen_after_parse"`
-	Host          string            `json:"host"`
-	Proxy         string            `json:"proxy"`
-	FolderName    map[string]string `json:"folder_name"`
-	path          string
+	Host  string `json:"host"`
+	Proxy string `json:"proxy"`
+	path  string
 }
 
 // Instance global configuration
@@ -42,20 +25,6 @@ func Init(path string) {
 	if err := c.load(); err != nil {
 		color.Red(err.Error())
 		color.Green("Create a new configuration in %v", path)
-	}
-	if c.Default < 0 || c.Default >= len(c.Template) {
-		c.Default = 0
-	}
-	if c.FolderName == nil {
-		c.FolderName = map[string]string{}
-	}
-	if _, ok := c.FolderName["root"]; !ok {
-		c.FolderName["root"] = "cf"
-	}
-	for _, problemType := range client.ProblemTypes {
-		if _, ok := c.FolderName[problemType]; !ok {
-			c.FolderName[problemType] = problemType
-		}
 	}
 	c.save()
 	Instance = c
