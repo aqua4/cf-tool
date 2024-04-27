@@ -1,6 +1,7 @@
 name: Go Release
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*'
@@ -19,7 +20,7 @@ jobs:
     - name: Replace date string and version string
       run: |
         export VERSION=${{ github.ref_name }}
-        export BUILD_TIME=`TZ=":Asia/Shanghai" date`
+        export BUILD_TIME=`TZ=":Europe/Zurich" date`
         sed -i'.bak' "s/\$CI_VERSION/$VERSION/g" cf.go
         sed -i'.bak' "s/\$CI_BUILD_TIME/$BUILD_TIME/g" cf.go
     - name: Build
@@ -27,11 +28,11 @@ jobs:
         mkdir -p output
         GOOS=windows GOARCH=amd64 go build -o output/cf_windows_x64.exe
         GOOS=windows GOARCH=arm64 go build -o output/cf_windows_arm64.exe
-        GOOS=linux GOARCH=amd64 go build -o output/cf_linux_x64 
+        GOOS=linux GOARCH=amd64 go build -o output/cf_linux_x64
         GOOS=linux GOARCH=arm64 go build -o output/cf_linux_arm64
-        GOOS=darwin GOARCH=amd64 go build -o output/cf_macos_x64 
-        GOOS=darwin GOARCH=arm64 go build -o output/cf_macos_arm64 
-        
+        GOOS=darwin GOARCH=amd64 go build -o output/cf_macos_x64
+        GOOS=darwin GOARCH=arm64 go build -o output/cf_macos_arm64
+
     - name: Compress files
       run: |
         cp output/cf_windows_x64.exe ./cf.exe
