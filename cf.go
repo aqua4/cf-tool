@@ -22,17 +22,16 @@ func main() {
 You should run "cf config" to configure your handle and password at first.
 Usage:
   cf config
-  cf submit -f <file> [<specifier>...]
-  cf upgrade
+  cf submit -f <file> <url>
 Options:
-  -h --help            Show this screen.
-  --version            Show version.
-  -f <file>, --file <file>, <file>
-                       Path to file. E.g. "a.cpp", "./temp/a.cpp"
+  -h --help     Show this screen.
+  --version     Show version.
+  -f <file>, --file <file>
+                Path to file. E.g. "a.cpp", "./temp/a.cpp"
+  <url>         Problem URL. E.g. "https://codeforces.com/contest/180/problem/A",
 Examples:
   cf config            Configure the cf-tool.
   cf submit -f a.cpp https://codeforces.com/contest/100/A
-  cf upgrade           Upgrade the "cf" to the latest version from GitHub.
 File:
   cf will save some data in some files:
   "~/.cf/config"        Configuration file.

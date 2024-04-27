@@ -2,6 +2,7 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -9,22 +10,20 @@ import (
 	"path/filepath"
 
 	"cf-tool/cookiejar"
-	"github.com/fatih/color"
 )
 
 // Client codeforces client
 type Client struct {
-	Jar            *cookiejar.Jar `json:"cookies"`
-	Handle         string         `json:"handle"`
-	HandleOrEmail  string         `json:"handle_or_email"`
-	Password       string         `json:"password"`
-	Ftaa           string         `json:"ftaa"`
-	Bfaa           string         `json:"bfaa"`
-	LastSubmission *Info          `json:"last_submission"`
-	host           string
-	proxy          string
-	path           string
-	client         *http.Client
+	Jar           *cookiejar.Jar `json:"cookies"`
+	Handle        string         `json:"handle"`
+	HandleOrEmail string         `json:"handle_or_email"`
+	Password      string         `json:"password"`
+	Ftaa          string         `json:"ftaa"`
+	Bfaa          string         `json:"bfaa"`
+	host          string
+	proxy         string
+	path          string
+	client        *http.Client
 }
 
 // Instance global client
@@ -33,24 +32,24 @@ var Instance *Client
 // Init initialize
 func Init(path, host, proxy string) {
 	jar, _ := cookiejar.New(nil)
-	c := &Client{Jar: jar, LastSubmission: nil, path: path, host: host, proxy: proxy, client: nil}
+	c := &Client{Jar: jar, path: path, host: host, proxy: proxy, client: nil}
 	if err := c.load(); err != nil {
-		color.Red(err.Error())
-		color.Green("Create a new session in %v", path)
+		fmt.Println(err.Error())
+		fmt.Println("Create a new session in %v", path)
 	}
 	Proxy := http.ProxyFromEnvironment
 	if len(proxy) > 0 {
 		proxyURL, err := url.Parse(proxy)
 		if err != nil {
-			color.Red(err.Error())
-			color.Green("Use default proxy from environment")
+			fmt.Println(err.Error())
+			fmt.Println("Use default proxy from environment")
 		} else {
 			Proxy = http.ProxyURL(proxyURL)
 		}
 	}
 	c.client = &http.Client{Jar: c.Jar, Transport: &http.Transport{Proxy: Proxy}}
 	if err := c.save(); err != nil {
-		color.Red(err.Error())
+		fmt.Println(err.Error())
 	}
 	Instance = c
 }
@@ -80,7 +79,7 @@ func (c *Client) save() (err error) {
 		err = os.WriteFile(c.path, data, 0644)
 	}
 	if err != nil {
-		color.Red("Cannot save session to %v\n%v", c.path, err.Error())
+		fmt.Println("Cannot save session to %v\n%v", c.path, err.Error())
 	}
 	return
 }

@@ -10,7 +10,6 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"github.com/fatih/color"
 	"golang.org/x/crypto/ssh/terminal"
 	"io"
 	"net/http"
@@ -51,7 +50,8 @@ func findCsrf(body []byte) (string, error) {
 	}
 	return string(tmp[1]), nil
 }
-func AesDecrypt(cipherIn []byte, key, iv []byte) ([]byte, error) {
+
+func aesDecrypt(cipherIn []byte, key, iv []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -62,6 +62,7 @@ func AesDecrypt(cipherIn []byte, key, iv []byte) ([]byte, error) {
 	blockMode.CryptBlocks(origData, cipherIn)
 	return origData, nil
 }
+
 func addRCPC(c *Client, body []byte) ([]byte, error) {
 	if strings.Index(string(body), "Redirecting... Please, wait.") != -1 {
 		reg := regexp.MustCompile(`var a=toNumbers\("([0-9a-f]*)"\),b=toNumbers\("([0-9a-f]*)"\),c=toNumbers\("([0-9a-f]*)"\);`)
@@ -72,7 +73,7 @@ func addRCPC(c *Client, body []byte) ([]byte, error) {
 			key, _ := hex.DecodeString(string(out[0][1]))
 			iv, _ := hex.DecodeString(string(out[0][2]))
 			cipherIn, _ := hex.DecodeString(string(out[0][3]))
-			cipherOut, err := AesDecrypt(cipherIn, key, iv)
+			cipherOut, err := aesDecrypt(cipherIn, key, iv)
 			if err != nil {
 				return nil, err
 			}
@@ -92,7 +93,7 @@ func addRCPC(c *Client, body []byte) ([]byte, error) {
 
 // Login codeforces with handler and password
 func (c *Client) Login() (err error) {
-	color.Cyan("Login %v...\n", c.HandleOrEmail)
+	fmt.Printf("Login %v...\n", c.HandleOrEmail)
 
 	password, err := c.DecryptPassword()
 	if err != nil {
@@ -101,7 +102,6 @@ func (c *Client) Login() (err error) {
 
 	jar, _ := cookiejar.New(nil)
 
-	//jar.SetCookies()
 	c.client.Jar = jar
 	body, err := util.GetBody(c.client, c.host+"/enter")
 	if err != nil {
@@ -142,8 +142,8 @@ func (c *Client) Login() (err error) {
 	c.Bfaa = bfaa
 	c.Handle = handle
 	c.Jar = jar
-	color.Green("Succeed!!")
-	color.Green("Welcome %v~", handle)
+	fmt.Println("Succeed!!")
+	fmt.Println("Welcome %v~", handle)
 	return c.save()
 }
 
@@ -206,10 +206,10 @@ func (c *Client) DecryptPassword() (string, error) {
 // ConfigLogin configure handle and password
 func (c *Client) ConfigLogin() (err error) {
 	if c.Handle != "" {
-		color.Green("Current user: %v", c.Handle)
+		fmt.Println("Current user: %v", c.Handle)
 	}
-	color.Cyan("Configure handle/email and password")
-	color.Cyan("Note: The password is invisible, just type it correctly.")
+	fmt.Println("Configure handle/email and password")
+	fmt.Println("Note: The password is invisible, just type it correctly.")
 
 	fmt.Printf("handle/email: ")
 	handleOrEmail := util.ScanlineTrim()
@@ -229,7 +229,7 @@ func (c *Client) ConfigLogin() (err error) {
 		password = string(bytePassword)
 		fmt.Println()
 	} else {
-		color.Red("Your terminal does not support the hidden password.")
+		fmt.Println("Your terminal does not support the hidden password.")
 		fmt.Printf("password: ")
 		password = util.Scanline()
 	}

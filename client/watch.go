@@ -167,9 +167,6 @@ func findSubmission(body []byte, n int) ([][]byte, error) {
 	return tmp, nil
 }
 
-// var ruTime = "DD.MM.YYYY HH:mm";
-// var enTime = "MMM/DD/YYYY HH:mm";
-// https://github.com/go-shadow/moment/blob/master/moment_parser.go
 const ruTime = "02.01.2006 15:04 Z07:00"
 const enTime = "Jan/02/2006 15:04 Z07:00"
 
@@ -309,7 +306,6 @@ func (c *Client) WatchSubmission(info Info, n int, line bool) (submissions []Sub
 }
 
 var colorMap = map[string]color.Attribute{
-	"${c-waiting}":  color.FgWhite,
 	"${c-failed}":   color.FgRed,
 	"${c-accepted}": color.FgGreen,
 	"${c-rejected}": color.FgBlue,

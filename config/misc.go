@@ -5,7 +5,6 @@ import (
 	"regexp"
 
 	"cf-tool/util"
-	"github.com/fatih/color"
 )
 
 func formatHost(host string) (string, error) {
@@ -33,18 +32,18 @@ func (c *Config) SetHost() (err error) {
 	if err != nil {
 		host = "https://codeforces.com"
 	}
-	color.Green("Current host domain is %v", host)
-	color.Cyan(`Set a new host domain (e.g. "https://codeforces.com"`)
-	color.Cyan(`Note: Don't forget the "http://" or "https://"`)
+	fmt.Println("Current host domain is %v", host)
+	fmt.Println(`Set a new host domain (e.g. "https://codeforces.com"`)
+	fmt.Println(`Note: Don't forget the "http://" or "https://"`)
 	for {
 		host, err = formatHost(util.ScanlineTrim())
 		if err == nil {
 			break
 		}
-		color.Red(err.Error())
+		fmt.Println(err.Error())
 	}
 	c.Host = host
-	color.Green("New host domain is %v", host)
+	fmt.Println("New host domain is %v", host)
 	return c.save()
 }
 
@@ -55,25 +54,25 @@ func (c *Config) SetProxy() (err error) {
 		proxy = ""
 	}
 	if len(proxy) == 0 {
-		color.Green("Current proxy is based on environment")
+		fmt.Println("Current proxy is based on environment")
 	} else {
-		color.Green("Current proxy is %v", proxy)
+		fmt.Println("Current proxy is %v", proxy)
 	}
-	color.Cyan(`Set a new proxy (e.g. "http://127.0.0.1:2333", "socks5://127.0.0.1:1080"`)
-	color.Cyan(`Enter empty line if you want to use default proxy from environment`)
-	color.Cyan(`Note: Proxy URL should match "protocol://host[:port]"`)
+	fmt.Println(`Set a new proxy (e.g. "http://127.0.0.1:2333", "socks5://127.0.0.1:1080"`)
+	fmt.Println(`Enter empty line if you want to use default proxy from environment`)
+	fmt.Println(`Note: Proxy URL should match "protocol://host[:port]"`)
 	for {
 		proxy, err = formatProxy(util.ScanlineTrim())
 		if err == nil {
 			break
 		}
-		color.Red(err.Error())
+		fmt.Println(err.Error())
 	}
 	c.Proxy = proxy
 	if len(proxy) == 0 {
-		color.Green("Current proxy is based on environment")
+		fmt.Println("Current proxy is based on environment")
 	} else {
-		color.Green("Current proxy is %v", proxy)
+		fmt.Println("Current proxy is %v", proxy)
 	}
 	return c.save()
 }

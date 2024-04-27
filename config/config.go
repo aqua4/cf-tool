@@ -3,7 +3,7 @@ package config
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/fatih/color"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -23,8 +23,8 @@ var Instance *Config
 func Init(path string) {
 	c := &Config{path: path, Host: "https://codeforces.com", Proxy: ""}
 	if err := c.load(); err != nil {
-		color.Red(err.Error())
-		color.Green("Create a new configuration in %v", path)
+		fmt.Println(err.Error())
+		fmt.Println("Create a new configuration in %v", path)
 	}
 	c.save()
 	Instance = c
@@ -59,7 +59,7 @@ func (c *Config) save() (err error) {
 		err = os.WriteFile(c.path, data.Bytes(), 0644)
 	}
 	if err != nil {
-		color.Red("Cannot save config to %v\n%v", c.path, err.Error())
+		fmt.Println("Cannot save config to %v\n%v", c.path, err.Error())
 	}
 	return
 }

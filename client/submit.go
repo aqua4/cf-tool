@@ -8,8 +8,6 @@ import (
 	"strings"
 
 	"cf-tool/util"
-
-	"github.com/fatih/color"
 )
 
 func findMessage(body []byte) (string, error) {
@@ -32,7 +30,7 @@ func findErrorMessage(body []byte) (string, error) {
 
 // Submit submit (block while pending)
 func (c *Client) Submit(info Info, langID, source string) (err error) {
-	color.Cyan("Submit " + info.Hint())
+	fmt.Printf("Submit %v using %v\n", info.Hint(), Langs[langID])
 
 	URL, err := info.SubmitURL(c.host)
 	if err != nil {
@@ -86,15 +84,12 @@ func (c *Client) Submit(info Info, langID, source string) (err error) {
 		return errors.New(msg)
 	}
 
-	color.Green("Submitted")
+	fmt.Println("Submitted")
 
-	submissions, err := c.WatchSubmission(info, 1, true)
-	if err != nil {
+	if _, err = c.WatchSubmission(info, 1, true); err != nil {
 		return
 	}
 
-	info.SubmissionID = submissions[0].ParseID()
 	c.Handle = handle
-	c.LastSubmission = &info
 	return c.save()
 }
