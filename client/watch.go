@@ -137,7 +137,7 @@ func (c *Client) WatchSubmission(info Info) error {
 		if submission.end {
 			return nil
 		}
-		sub := time.Now().Sub(st)
+		sub := time.Since(st)
 		if sub < time.Second {
 			time.Sleep(time.Duration(time.Second - sub))
 		}

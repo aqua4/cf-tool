@@ -28,7 +28,7 @@ func Eval(opts docopt.Opts) error {
 
 func loginAgain(cln *client.Client, err error) error {
 	if err != nil && err.Error() == client.ErrorNotLogged {
-		fmt.Println("Not logged. Try to login\n")
+		fmt.Println("Not logged. Try to login")
 		err = cln.Login()
 	}
 	return err

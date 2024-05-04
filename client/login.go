@@ -10,7 +10,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 	"io"
 	"net/http"
 	"net/url"
@@ -64,7 +64,7 @@ func aesDecrypt(cipherIn []byte, key, iv []byte) ([]byte, error) {
 }
 
 func addRCPC(c *Client, body []byte) ([]byte, error) {
-	if strings.Index(string(body), "Redirecting... Please, wait.") != -1 {
+	if strings.Contains(string(body), "Redirecting... Please, wait.") {
 		reg := regexp.MustCompile(`var a=toNumbers\("([0-9a-f]*)"\),b=toNumbers\("([0-9a-f]*)"\),c=toNumbers\("([0-9a-f]*)"\);`)
 		out := reg.FindAllSubmatch(body, -1)
 		if len(out) != 1 {
@@ -215,9 +215,9 @@ func (c *Client) ConfigLogin() (err error) {
 	handleOrEmail := util.ScanlineTrim()
 
 	password := ""
-	if terminal.IsTerminal(int(syscall.Stdin)) {
+	if term.IsTerminal(int(syscall.Stdin)) {
 		fmt.Printf("password: ")
-		bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
+		bytePassword, err := term.ReadPassword(int(syscall.Stdin))
 		if err != nil {
 			fmt.Println()
 			if err.Error() == "EOF" {

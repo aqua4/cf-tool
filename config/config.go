@@ -24,9 +24,11 @@ func Init(path string) {
 	c := &Config{path: path, Host: "https://codeforces.com", Proxy: ""}
 	if err := c.load(); err != nil {
 		fmt.Println(err.Error())
-		fmt.Println("Create a new configuration in %v", path)
+		fmt.Printf("Create a new configuration in %v\n", path)
 	}
-	c.save()
+	if err := c.save(); err != nil {
+		fmt.Println(err)
+	}
 	Instance = c
 }
 
@@ -55,11 +57,12 @@ func (c *Config) save() (err error) {
 	encoder.SetEscapeHTML(false)
 	err = encoder.Encode(c)
 	if err == nil {
-		os.MkdirAll(filepath.Dir(c.path), os.ModePerm)
-		err = os.WriteFile(c.path, data.Bytes(), 0644)
-	}
-	if err != nil {
-		fmt.Println("Cannot save config to %v\n%v", c.path, err.Error())
+		err = os.MkdirAll(filepath.Dir(c.path), os.ModePerm)
+		if err == nil {
+			err = os.WriteFile(c.path, data.Bytes(), 0644)
+		}
+	} else {
+		err = fmt.Errorf("Cannot save config to %v\n%v", c.path, err.Error())
 	}
 	return
 }

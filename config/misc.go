@@ -32,7 +32,7 @@ func (c *Config) SetHost() (err error) {
 	if err != nil {
 		host = "https://codeforces.com"
 	}
-	fmt.Println("Current host domain is %v", host)
+	fmt.Printf("Current host domain is %v\n", host)
 	fmt.Println(`Set a new host domain (e.g. "https://codeforces.com"`)
 	fmt.Println(`Note: Don't forget the "http://" or "https://"`)
 	for {
@@ -43,7 +43,7 @@ func (c *Config) SetHost() (err error) {
 		fmt.Println(err.Error())
 	}
 	c.Host = host
-	fmt.Println("New host domain is %v", host)
+	fmt.Printf("New host domain is %v\n", host)
 	return c.save()
 }
 
@@ -56,7 +56,7 @@ func (c *Config) SetProxy() (err error) {
 	if len(proxy) == 0 {
 		fmt.Println("Current proxy is based on environment")
 	} else {
-		fmt.Println("Current proxy is %v", proxy)
+		fmt.Printf("Current proxy is %v\n", proxy)
 	}
 	fmt.Println(`Set a new proxy (e.g. "http://127.0.0.1:2333", "socks5://127.0.0.1:1080"`)
 	fmt.Println(`Enter empty line if you want to use default proxy from environment`)
@@ -72,7 +72,7 @@ func (c *Config) SetProxy() (err error) {
 	if len(proxy) == 0 {
 		fmt.Println("Current proxy is based on environment")
 	} else {
-		fmt.Println("Current proxy is %v", proxy)
+		fmt.Printf("Current proxy is %v\n", proxy)
 	}
 	return c.save()
 }
