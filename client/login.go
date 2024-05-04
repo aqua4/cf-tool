@@ -143,7 +143,7 @@ func (c *Client) Login() (err error) {
 	c.Handle = handle
 	c.Jar = jar
 	fmt.Println("Succeed!!")
-	fmt.Println("Welcome %v~", handle)
+	fmt.Printf("Welcome %v~\n", handle)
 	return c.save()
 }
 
@@ -206,7 +206,7 @@ func (c *Client) DecryptPassword() (string, error) {
 // ConfigLogin configure handle and password
 func (c *Client) ConfigLogin() (err error) {
 	if c.Handle != "" {
-		fmt.Println("Current user: %v", c.Handle)
+		fmt.Printf("Current user: %v\n", c.Handle)
 	}
 	fmt.Println("Configure handle/email and password")
 	fmt.Println("Note: The password is invisible, just type it correctly.")

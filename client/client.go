@@ -35,7 +35,7 @@ func Init(path, host, proxy string) {
 	c := &Client{Jar: jar, path: path, host: host, proxy: proxy, client: nil}
 	if err := c.load(); err != nil {
 		fmt.Println(err.Error())
-		fmt.Println("Create a new session in %v", path)
+		fmt.Printf("Create a new session in %v\n", path)
 	}
 	Proxy := http.ProxyFromEnvironment
 	if len(proxy) > 0 {
@@ -79,7 +79,7 @@ func (c *Client) save() (err error) {
 		err = os.WriteFile(c.path, data, 0644)
 	}
 	if err != nil {
-		fmt.Println("Cannot save session to %v\n%v", c.path, err.Error())
+		fmt.Printf("Cannot save session to %v\n%v\n", c.path, err.Error())
 	}
 	return
 }

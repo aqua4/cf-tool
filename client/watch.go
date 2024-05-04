@@ -77,7 +77,7 @@ func parseSubmission(body []byte) (ret Submission, err error) {
 	status = colReg.ReplaceAllString(status, "")
 	status = tagReg.ReplaceAllString(status, "")
 	status = strings.TrimSpace(status)
-  // empty status usually means that the submission is in queue
+	// empty status usually means that the submission is in queue
 	if status == "" {
 		status = Running
 	}
