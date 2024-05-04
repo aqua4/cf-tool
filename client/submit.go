@@ -86,7 +86,7 @@ func (c *Client) Submit(info Info, langID, source string) (err error) {
 
 	fmt.Println("Submitted")
 
-	if _, err = c.WatchSubmission(info, 1, true); err != nil {
+	if err = c.WatchSubmission(info); err != nil {
 		return
 	}
 

@@ -10,6 +10,8 @@ Codeforces Tool CP Editor edition is a command-line interface tool for [Codeforc
 
 It's fast, small and cross-platform.
 
+Simplified version of [Original CF tool](https://github.com/xalanq/cf-tool).
+
 [Installation](#installation) | [Usage](#usage) | [FAQ](#faq)
 
 ## Features
@@ -26,7 +28,7 @@ Pull requests are always welcome.
 
 You can download the pre-compiled binary file in [here](https://github.com/aqua4/cf-tool-cpe/releases).
 
-Or you can compile it from the source **(go >= 1.18)**:
+Or you can compile it from the source **(go >= 1.17)**:
 
 ```plain
 $ go get github.com/aqua4/cf-tool-cpe
@@ -58,6 +60,13 @@ File:
   "~" is the home directory of current user in your system.
 ```
 
+## Main changes
+
+* Removed most of the features which are already supported by CP editor like templates, colors, etc.
+* Removed most of the CLI commands which are not used by CP editor.
+* Removed all programming languages support.
+* Added C++20 support.
+
 ## FAQ
 
 ### I double click the program but it doesn't work
@@ -69,3 +78,9 @@ Codeforces Tool is a command-line tool. You should run it in terminal.
 You should put the `cf` program to a path (e.g. `/usr/bin/` in Linux) which has been added to system environment variable PATH.
 
 Or just google "how to add a path to system environment variable PATH".
+
+### I want to change C++ compiler version or source file extension:
+
+**Reminder:** C++20 is backwards compatible with previous versions, i.e. you can submit C++11/14/17 with C++20.
+
+Change [supported languages](https://github.com/aqua4/cf-tool-cpe/blob/main/client/langs.go) and re-build the binary.
