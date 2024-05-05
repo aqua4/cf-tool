@@ -2,7 +2,7 @@ name: Go Release
 
 on:
   workflow_dispatch:
-  inputs:
+    inputs:
       version:
         description: The version to publish
         required: true
