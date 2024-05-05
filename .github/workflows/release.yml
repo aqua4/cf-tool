@@ -2,9 +2,10 @@ name: Go Release
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*'
+  inputs:
+      version:
+        description: The version to publish
+        required: true
 
 jobs:
 
@@ -19,7 +20,7 @@ jobs:
         go-version: 1.17
     - name: Replace version string
       run: |
-        export VERSION=${{ github.ref_name }}
+        export VERSION=${{ inputs.version }}
         sed -i'.bak' "s/v1\.0\.10/$VERSION/g" cf.go
     - name: Build
       run: |
@@ -51,8 +52,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ inputs.version }}
+        release_name: Release ${{ inputs.version }}
         draft: false
         prerelease: false
     - name: Upload Windows x64 Release Zip
