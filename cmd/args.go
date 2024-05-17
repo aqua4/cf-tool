@@ -44,6 +44,9 @@ func parseArgs(opts docopt.Opts) error {
 		if info.ProblemID != "" && info.ProblemID != value {
 			return fmt.Errorf("Problem ID conflicts: %v %v", info.ProblemID, value)
 		}
+		if value == "0" {
+			value = "A"
+		}
 		info.ProblemID = value
 	}
 	if info.ProblemType == "" || info.ProblemType == "contest" {

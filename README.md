@@ -3,7 +3,7 @@
 
 [![Github release](https://img.shields.io/github/release/aqua4/cf-tool-cpe.svg)](https://github.com/aqua4/cf-tool-cpe/releases)
 [![Go Report Card](https://goreportcard.com/badge/github.com/aqua4/cf-tool-cpe)](https://goreportcard.com/report/github.com/aqua4/cf-tool-cpe)
-[![Go Version](https://img.shields.io/badge/go-%3E%3D1.18-green.svg)](https://github.com/golang)
+[![Go Version](https://img.shields.io/badge/go-%3E%3D1.17-green.svg)](https://github.com/golang)
 [![license](https://img.shields.io/badge/license-MIT-%23373737.svg)](https://raw.githubusercontent.com/aqua4/cf-tool-cpe/main/LICENSE)
 
 Codeforces Tool CP Editor edition is a command-line interface tool for [Codeforces](https://codeforces.com) and [CP Editor](https://github.com/cpeditor/cpeditor/).
@@ -66,6 +66,7 @@ File:
 * Removed most of the CLI commands which are not used by CP editor.
 * Removed all programming languages support.
 * Added C++20 support.
+* Problem "0" is interpreted as problem "A" during a contest.
 
 ## FAQ
 
