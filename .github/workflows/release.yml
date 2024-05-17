@@ -21,7 +21,7 @@ jobs:
     - name: Replace version string
       run: |
         export VERSION=${{ inputs.version }}
-        sed -i'.bak' "s/v1\.0\.10/$VERSION/g" cf.go
+        sed -i'.bak' "s/v1\.0\.11/$VERSION/g" cf.go
     - name: Build
       run: |
         mkdir -p output
